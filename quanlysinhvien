@@ -4,9 +4,11 @@
 using namespace std;
 struct sinhvien {
     string maSo, ten, lop, ngaySinh, diemRenLuyen;
+    char gioitinh[5];
     double anten, tinHieu, tinHoc, lapTrinh, tiengAnh;
 };
 typedef struct sinhvien SV;
+//Tao node de lap danh sach lien ket
 struct node{
     SV data;
     node * next;
@@ -48,6 +50,7 @@ void chenCuoi(LIST &ds, NODE *p){
         ds.pTail=p;
     }
 }
+//Ham nhap
 void Nhap(LIST &ds,int n){
     cout<<"NHAP THONG TIN SINH VIEN"<<endl;;
         SV x;
@@ -59,6 +62,8 @@ void Nhap(LIST &ds,int n){
         cin>>x.lop;
         cout<<"Ngay sinh  : ";fflush(stdin);
         cin>>x.ngaySinh;
+	cout<<"Gioi tinh: ";fflush(stdin);
+	cin>>x,gioitinh;
         cout<<"Diem ren luyen : ";fflush(stdin);
         cin>>x.diemRenLuyen;
         cout<<"Anten : ";fflush(stdin);
@@ -71,7 +76,7 @@ void Nhap(LIST &ds,int n){
         cin>>x.lapTrinh;
         cout<<"Tieng anh : ";fflush(stdin);
         cin>>x.tiengAnh;	
-	    cout<<endl<<endl;
+	 cout<<endl<<endl;
         NODE *p = new NODE;
         p = taoNode(x);
         chenCuoi(ds,p);
@@ -82,6 +87,7 @@ void Xuat(LIST ds){
         cout<<"Ten sinh vien : "<<p->data.ten<<endl;
         cout<<"Lop : "<<p->data.lop<<endl;
         cout<<"Ngay sinh : "<<p->data.ngaySinh<<endl;
+	cout<<"Gioi tinh: "<<p->data.gioitinh<<endl;
         cout<<"Diem ren luyen : "<<p->data.diemRenLuyen<<endl;
         cout<<"Anten : "<<p->data.anten<<endl;
         cout<<"Tin hieu : "<<p->data.tinHieu<<endl;
@@ -183,22 +189,45 @@ int main(){
 		}
 			break;
 	    }
-//		case 5:{
-//			string maSo;
-//			kiemTraMasoTonTai(a,n,maSo);
-//			break;
-//		}
-//		case 6:{
-//			string maSo;
-//			timSvTheoMaso(a,n,maSo);
-//			break;
-//		}
-//		case 7:{
-//			string maSo;
-//			xoaOneSV(a,n,maSo);
-//			n--;
-//			break;
-//		}
-	}
-}while(y!=0);
+case 5:{			
+		    if(kiemTraRong(ds)==!true){
+			    kiemTraTonTaiSv(ds,size);
+		}
+		else{
+			    cout<<"DANH SACH RONG~ .KHONG THE KIEM TRA!!!!"<<endl;
+		}
+			break;
+		}
+		case 6:{
+			if(kiemTraRong(ds)==!true){
+			    timKiemSv(ds,size);
+		}
+		else{
+			    cout<<"DANH SACH RONG~ .KHONG TIM THAY!!!!"<<endl;
+		}
+			break;
+		}
+		case 7:{
+            if(kiemTraRong(ds) == !true){
+			    xoaMaSv(ds,size);
+			    cout<<"DELETED~!!"<<endl;
+	        }
+	        else{
+	        	cout<<"DANH SACH RONG~~!!!!"<<endl;
+			}
+        }
+        case 8:{
+	        if(kiemTraRong(ds)==!true){
+			    sapxep(ds,size);
+        }
+		else{
+			    cout<<"DANH SACH RONG~ .KHONG THE SAP XEP!!!!"<<endl;
+		}
+			break;
+		}
+    }
+	cout << "****** Nhan phim bat ky de tiep tuc ******";
+		char ch = _getch();
+  		system("cls");
+ }while(y!=0);
 }
