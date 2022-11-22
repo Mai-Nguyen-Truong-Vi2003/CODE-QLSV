@@ -1,46 +1,59 @@
 #include<iostream>
-#include<stdlib.h>
+#include <sstream>
+#include <fstream>
+#include <stdlib.h>
 #include<string.h>
+#include <conio.h>
+#include <string>
 using namespace std;
+//Tao cau truc sinh vien
 struct sinhvien {
-    string maSo, ten, lop, ngaySinh, diemRenLuyen;
+    string maSo, ten, lop, ngaySinh;
     char gioitinh[5];
-    double anten, tinHieu, tinHoc, lapTrinh, tiengAnh;
+    char hocluc[10];
+    double anten, tinHieu, tinHoc, lapTrinh, tiengAnh, diemRenLuyen, tBC;
 };
 typedef struct sinhvien SV;
-//Tao node de lap danh sach lien ket
+//dinh nghia mot node
 struct node{
-    SV data;
-    node * next;
+    SV data; // du lieu
+    node * next; // con tro next
 };
 typedef struct node NODE;
-struct list{
-    NODE *pHead;
-    NODE *pTail;
+//Tao danh sach
+struct list{ 
+// thuoc tinh cua list
+    NODE *pHead; // node dau
+    NODE *pTail; // node cuoi
 };
 typedef struct list LIST;
+//Ham khoi tao
 void KhoiTao(LIST &ds){
+// code ham khoi tao, danh sach rong khi head va tail deu NULL
     ds.pHead = NULL;
     ds.pTail = NULL;
 }
-int kiemTraRong(LIST ds){
+// Kiem tra rong
+bool kiemTraRong(LIST ds){
     if (ds.pHead == NULL){
-        return 1;
+        return true;
     }
-    return 0;
+    return !true;
 }
-NODE* taoNode(SV x) {
+// Tao mot node
+NODE* taoNode(SV x) { 
     NODE *p;
     p = new NODE;
     if (p==NULL){
-        printf ("ERROR");
+        cout<<"ERROR"<<endl;
         return NULL;
     }
     p->data=x;
     p->next=NULL;
     return p;
 }
-void chenCuoi(LIST &ds, NODE *p){
+// Chen cuoi( Thao tac trong danh sach lien ket)
+void chenCuoi(LIST &ds, NODE *p){ 
     if(ds.pHead==NULL){
         ds.pHead=p;
         ds.pTail=p;
@@ -51,19 +64,19 @@ void chenCuoi(LIST &ds, NODE *p){
     }
 }
 //Ham nhap
-void Nhap(LIST &ds,int n){
+void Nhap(LIST &ds,int size){
     cout<<"NHAP THONG TIN SINH VIEN"<<endl;;
         SV x;
         cout<<"Ma sinh vien : ";fflush(stdin);
         cin>>x.maSo;
         cout<<"Ten sinh vien : ";fflush(stdin);
         cin>>x.ten;
-        cout<<"Lop : ";fflush(stdin);
-        cin>>x.lop;
+         cout<<"Gioi tinh: ";fflush(stdin);
+        cin>>x.gioitinh;
         cout<<"Ngay sinh  : ";fflush(stdin);
         cin>>x.ngaySinh;
-	cout<<"Gioi tinh: ";fflush(stdin);
-	cin>>x,gioitinh;
+        cout<<"Lop : ";fflush(stdin);
+        cin>>x.lop;
         cout<<"Diem ren luyen : ";fflush(stdin);
         cin>>x.diemRenLuyen;
         cout<<"Anten : ";fflush(stdin);
@@ -75,44 +88,46 @@ void Nhap(LIST &ds,int n){
         cout<<"Lap trinh : ";fflush(stdin);
         cin>>x.lapTrinh;
         cout<<"Tieng anh : ";fflush(stdin);
-        cin>>x.tiengAnh;	
-	 cout<<endl<<endl;
+        cin>>x.tiengAnh;
+		cout<<"Diem trung binh:"<<(x.tBC=(x.anten+x.tinHieu+x.tinHoc+x.lapTrinh+x.tiengAnh)/5); 
+	    cout<<endl<<endl;
         NODE *p = new NODE;
         p = taoNode(x);
         chenCuoi(ds,p);
 }
+//Ham xuat
 void Xuat(LIST ds){
 	for(NODE *p = ds.pHead; p!= NULL; p=p->next){
-        cout<<"Ma sinh vien : "<<p->data.maSo<<endl;
-        cout<<"Ten sinh vien : "<<p->data.ten<<endl;
-        cout<<"Lop : "<<p->data.lop<<endl;
-        cout<<"Ngay sinh : "<<p->data.ngaySinh<<endl;
-	cout<<"Gioi tinh: "<<p->data.gioitinh<<endl;
-        cout<<"Diem ren luyen : "<<p->data.diemRenLuyen<<endl;
-        cout<<"Anten : "<<p->data.anten<<endl;
-        cout<<"Tin hieu : "<<p->data.tinHieu<<endl;
-        cout<<"Tin Hoc : "<<p->data.tinHoc<<endl;
-        cout<<"Lap trinh : "<<p->data.lapTrinh<<endl;
-        cout<<"Tieng anh : "<<p->data.tiengAnh<<endl;				        
+	    cout<<"Ma so: "<<p->data.maSo<<"|";
+        cout<<"Ten: "<<p->data.ten<<"|";
+        cout<<"Gioi tinh: "<<p->data.gioitinh<<"|";
+        cout<<"Ngay sinh: "<<p->data.ngaySinh<<"|";
+        cout<<"Lop: "<<p->data.lop<<"|";
+        cout<<"Diem ren luyen: "<<p->data.diemRenLuyen<<"|";
+        cout<<"An ten:"<<p->data.anten<<"|";
+        cout<<"Tin Hieu: "<<p->data.tinHieu<<"|";
+        cout<<"Tin Hoc: "<<p->data.tinHoc<<"|";
+        cout<<"Lap Trinh:"<<p->data.lapTrinh<<"|";
+        cout<<"Tieng Anh:"<<p->data.tiengAnh<<"|";	
+		cout<<"Diem trung binh: "<<p->data.tBC<<"|";
+			if(p->data.tBC<5.0){
+            cout<<"Hoc luc: yeu"<<p->data.hocluc<<"."<<endl;
+		}
+        else if(p->data.tBC>5.0 && p->data.tBC<6.5){
+            cout<<"Hoc luc: trung binh"<<p->data.hocluc<<"."<<endl;
+        }
+        else if(p->data.tBC>6.5 && p->data.tBC<8.0){
+            cout<<"Hoc luc: kha"<<p->data.hocluc<<"."<<endl;
+        }
+        else{
+            cout<<"Hoc luc: gioi"<<p->data.hocluc<<"."<<endl;
+        }
 	}
 }
-
-void SapXep(LIST &ds){
-    NODE *p, *q;
-    for(p = ds.pHead; p != ds.pTail; p=p->next){
-        for(q = p->next; q != NULL; q = q->next){
-            if(p->data.maSo > q->data.maSo){
-                SV x = p->data;
-                p->data = q->data;
-                q->data = x; 
-            }
-        }
-    }
-    Xuat(ds);
-}
+//Xoa cuoi ( Thao tac trong danh sach lien ket)
 void xoaCuoi(LIST &ds)
 {
-	int n;
+	int size;
     for(NODE *k = ds.pHead; k != NULL; k = k->next)
     {
         if(k->next == ds.pTail)
@@ -121,11 +136,11 @@ void xoaCuoi(LIST &ds)
             k->next = NULL;
             ds.pTail = k;
         }
-        n--;
+        size--;
     }
 //    Xuat(ds);
 }
-void xoaAll(LIST &ds,int n){
+void xoaAll(LIST &ds,int size){
     //duyet toan bo danh sach
     for(NODE *k = ds.pHead; k != NULL; k = k ->next)
     {
@@ -139,57 +154,140 @@ void xoaAll(LIST &ds,int n){
     //gan phan tu cuoi danh sach ve NULL
     ds.pTail = NULL;
 }
+// Kich thuoc cua danh sach 
+int Size(LIST &ds,int size){
+	for(NODE *k = ds.pHead; k != NULL; k = k ->next){
+		size++;
+	}
+	return size;
+}
+void xoaMaSv(LIST &ds,int size){
+	NODE *p = new NODE;
+	SV x;
+    p = taoNode(x);
+    cout<<"NHAP MA SO SV CAN XOA: ";
+    cin>>p->data.maSo;
+	for(NODE *k = ds.pHead; k != NULL; k = k ->next){
+		if(k->data.maSo==p->data.maSo){
+          p->next = k->next;
+          ds.pHead = p->next;
+			delete k;
+		}
+		else{
+			cout<<"KHONG TON TAI SV"<<endl;
+			
+		}
+	}
+
+}
+void kiemTraTonTaiSv(LIST &ds,int size){
+	NODE *p = new NODE;
+	SV x;
+    p = taoNode(x);
+    cout<<"NHAP SV CAN KIEM TRA: ";
+    cin>>p->data.maSo;
+	for(NODE *k = ds.pHead; k != NULL; k = k ->next){
+		if(k->data.maSo==p->data.maSo){
+			cout<<"TON TAI SV"<<endl;
+		}
+		else{
+			cout<<"KHONG TON TAI SV"<<endl;
+			break;
+		}
+	}
+}
+void timKiemSv(LIST &ds,int size){
+	NODE *p = new NODE;
+	SV x;
+    p = taoNode(x);
+    cout<<"NHAP SV CAN TIM: ";
+    cin>>p->data.maSo;
+	for(NODE *k = ds.pHead; k != NULL; k = k ->next){
+		if(k->data.maSo==p->data.maSo){
+		    Xuat(ds);
+		    return;
+		}
+		else{
+			cout<<"KHONG TON TAI SV"<<endl;
+			break;
+		}
+	}
+}
+
+void sapxep(LIST &ds, int size){
+	for(node *i = ds.pHead; i != NULL; i = i->next){
+		node *q = i;
+		for(node *j = i->next; j != NULL; j = j->next){
+			if(q->data.tBC > j->data.tBC){
+				q = j;
+			}
+			else if(q->data.tBC == j->data.tBC){
+				if(q->data.ten > j->data.ten){
+					q = j;
+				}
+			}
+		}
+		SV tmp = q->data;
+		q->data = i->data;
+		i->data = tmp;
+	}
+	Xuat(ds);
+}
+//Tao menu
+void mainMenu(){
+	cout<<"     ===================(MENU)==================== "<<endl;
+    cout<<"     * 1.Nhap thong tin Sinhvien.                * "<<endl;
+    cout<<"     * 2.In danh sach Sinhvien.                  * "<<endl;
+    cout<<"     * 3.Tong Sinh vien hien tai.                * "<<endl;
+    cout<<"     * 4.Xoa tat ca sinh vien.                   * "<<endl;
+    cout<<"     * 5.Kiem tra ton tai Sinh vien.             * "<<endl;
+    cout<<"     * 6.Tim Sinh Vien (theo Maso).              * "<<endl;
+    cout<<"     * 7.Xoa 1 Sinh vien (theo Maso).            * "<<endl;
+    cout<<"     * 8.Sap xep Sinh vien (theo TBC va ten).    * "<<endl;
+    cout<<"     ============================================= "<<endl;
+}
 int main(){
     LIST ds;
-    int n=0;
+    int size=0;
     int y;
-    cout<<"Menu:"<<endl;
-    cout<<"     ======================================== "<<endl;
-    cout<<"     * 1.Nhap thong tin Sinhvien.         * "<<endl;
-    cout<<"     * 2.In danh sach Sinhvien.           * "<<endl;
-    cout<<"     * 3.Tong Sinh vien hien tai.         * "<<endl;
-    cout<<"     * 4.Xoa tat ca sinh vien.            * "<<endl;
-//    cout<<"     * 5.Kiem tra ton tai Sinh vien.      * "<<endl;
-//    cout<<"     * 6.Tim Sinh Vien (theo Maso).       * "<<endl;
-//    cout<<"     * 7.Xoa 1 Sinh vien (theo Maso).     * "<<endl;
-    //cout<<"     * 8.Tong Sinh Vien theo Xep Loai.    * "<<endl;
-    cout<<"     ======================================== "<<endl;
     do{
+    mainMenu();
 	cout<<" Your choose is(Nhap '0' se thoat): ";
 	cin>>y;
 	cout<<"------------------------------------------------------------------------------------------------------------------------"<<endl;
     switch(y){
     	case 1:{
-    		Nhap(ds,n);
-    		++n;
+    		Nhap(ds,size);
+    		++size;
     	    break;
 		}
 		case 2:{
-			if(n==0){
+			if(kiemTraRong(ds)==true){
     	       cout<<"DANH SACH RONG~."<<endl;
 	    }
 	        else{
 			   cout<<"DANH SACH SINH VIEN: "<<endl;
+			   cout<<endl<<endl;
 		       Xuat(ds);
 		}
 		break;
 	}
 		case 3:{
-			cout<<"Tong Sinh vien: "<<n<<endl;
+			cout<<"Tong Sinh vien: "<<size<<endl;
 			break;
 		}
 		case 4:{
-			if (kiemTraRong(ds)== 1){
+			if (kiemTraRong(ds)== true){
 			   cout<<"\tDANH SACH RONG~, KHONG THE XOA."<<endl;
 		}
 			else{
-			xoaAll(ds,n);
+			xoaAll(ds,size);
+			size=0;
 		    cout<<"DA~ XOA'."<<endl;
-		    n=0;
 		}
 			break;
 	    }
-case 5:{			
+		case 5:{			
 		    if(kiemTraRong(ds)==!true){
 			    kiemTraTonTaiSv(ds,size);
 		}
@@ -226,8 +324,9 @@ case 5:{
 			break;
 		}
     }
+    cout<<endl<<endl;
 	cout << "****** Nhan phim bat ky de tiep tuc ******";
-		char ch = _getch();
+		char ch = getch();
   		system("cls");
  }while(y!=0);
 }
